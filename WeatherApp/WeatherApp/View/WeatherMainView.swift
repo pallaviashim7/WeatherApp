@@ -16,8 +16,12 @@ struct WeatherMainView: View {
         
         ZStack {
             // Background
-            Color(#colorLiteral(red: 0, green: 0.3285208941, blue: 0.5748849511, alpha: 1))
+            
+            LinearGradient(colors: [Color( #colorLiteral(red: 0.04271855205, green: 0.5116596222, blue: 0.9124780297, alpha: 1) ), Color( #colorLiteral(red: 0, green: 0.3285208941, blue: 0.5748849511, alpha: 1) )],
+                           startPoint: .top,
+                           endPoint: .bottom)
                 .edgesIgnoringSafeArea(.all)
+            
             
             VStack(spacing: 20.0) {
                 // Top View
