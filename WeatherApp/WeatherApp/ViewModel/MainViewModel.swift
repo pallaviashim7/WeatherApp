@@ -56,6 +56,8 @@ class MainViewModel: NSObject, ObservableObject {
         initializeData()
     }
     
+    // Check App storage and get previous coordinates if available and set to location,
+    
     func initializeData() {
         if isPreviousDataAvailable {
             location = CLLocationCoordinate2D(latitude: lastVisitedLocationLatitude, longitude: lastVisitedLocationLongitude)
@@ -65,6 +67,10 @@ class MainViewModel: NSObject, ObservableObject {
 
     
     // MARK: Public Methods
+    
+    // If calling on launch, get saved location
+    // If saved location not available or user is looking for his current location
+    // Use CLLocation to request for user permission and get current location coordinates
     
     func getCurrentLocation() {
         if isFirstTimeLoaded && isPreviousDataAvailable {
@@ -78,6 +84,11 @@ class MainViewModel: NSObject, ObservableObject {
             viewstate = .loading
         }
     }
+    
+    // Get weather data from user search text
+    // 1. Validates user entry
+    // 2. Calls geocoder api to get location coordinates from string
+    // 3. On Receiving the response from geocoder api, calls the api to get weather data
     
     func getWeatherDataUsingSearchText(_ text: String) {
         if validateSearchText(text) {
@@ -99,11 +110,15 @@ class MainViewModel: NSObject, ObservableObject {
     
     // Get coordinates
     
+    // To. Do - Move to a url factory to inject as dependency , for dev/prod/mock options
+    
     private func getGeocoderAPIUrl(userEntry: String) -> URL? {
         let urlString = "https://api.openweathermap.org/geo/1.0/direct?q=\(userEntry)&limit=5&appid=\(appID)"
         return URL(string: urlString)
     }
     
+    
+    // API call to get location coordinates
     private func getLocationInfo(userEntry: String) {
         
         guard let url = getGeocoderAPIUrl(userEntry: userEntry) else {
@@ -145,6 +160,8 @@ class MainViewModel: NSObject, ObservableObject {
     
     // Weather data
     
+    // API call to get weather data
+    
     private func getWeatherData() {
         viewstate = .loading
         
@@ -169,6 +186,8 @@ class MainViewModel: NSObject, ObservableObject {
         
     }
     
+    // To. Do - Move to a url factory to inject as dependency , for dev/prod/mock options
+
     private func getWeatherDataUrl() -> URL? {
         guard let userLocation = location else {return nil}
         let urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(userLocation.latitude)&lon=\(userLocation.longitude)&appid=\(appID)&units=imperial"

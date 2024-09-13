@@ -24,6 +24,10 @@ class WeatherViewModel: ObservableObject {
         self.serviceManager = serviceManager
     }
     
+    // Method to get image
+    // First check the cache for saved in images
+    // If not available, downloads the image
+    
     func getImage() {
         let imageKey = dataModel?.weather.first?.icon ?? ""
         if let savedImage = cacheManager.get(key: imageKey) {
@@ -43,6 +47,8 @@ class WeatherViewModel: ObservableObject {
         return URL(string: urlString)
     
     }
+    
+    // Download image will save the image in cache as well for later use
     
     private func downloadImage() {
         guard let url = imageUrl() else {
@@ -64,7 +70,5 @@ class WeatherViewModel: ObservableObject {
             }
             .store(in: &cancellable)
     }
-    
-    
     
 }

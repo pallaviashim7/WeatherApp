@@ -19,12 +19,14 @@ struct WeatherMainView: View {
             Color(#colorLiteral(red: 0, green: 0.3285208941, blue: 0.5748849511, alpha: 1))
                 .edgesIgnoringSafeArea(.all)
             
-            
             VStack(spacing: 20.0) {
                 // Top View
                 TopView(performAction: actionPerformed)
 
-                // ContentView
+                // ContentView Either one of these will be shown at once
+                // - Loading for waiting for location or api call
+                // - Error View to show any error to user
+                // - WeatherDataView to show weather data
                 switch viewModel.viewstate {
                 case .loading, .none:
                     LoadingView()
@@ -41,6 +43,7 @@ struct WeatherMainView: View {
         }
     }
     
+    // Top view actions
     private func actionPerformed( action: TopViewActions) {
             switch action {
             case .requestLocation:
